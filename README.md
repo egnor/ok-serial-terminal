@@ -31,14 +31,9 @@ omitted. The port is an [ok-serial match expression](https://github.com/egnor/ok
 
 Once connected, ctrl-`]` opens a menu and ctrl-`\` quits.
 
-Options (see `okterm --help`):
+On a terminal, unless `--plain` is given, `okterm` decorates the display with connection status, control signal state, and an indicator for unechoed typed characters.
 
-- `--plain` / `-p` - plain passthrough, no status decorations
-- `--reconnect` / `-r` - reconnect automatically if the port goes away
-- `--scan-time` / `-s SECONDS` - keep scanning this long for a matching port
-- `--oblivious` / `--polite` / `--exclusive` / `--stomp` - [port sharing mode](https://github.com/egnor/ok-py-serial#sharing-modes) (default `--exclusive`)
-
-Unless `--plain` is given (or stdin/stdout aren't the same terminal), `okterm` decorates the display with connection status, control signal state, and an indicator for typed characters the device hasn't echoed back.
+See `okterm --help` for more options (locking mode, etc).
 
 ## Socat for testing and profit
 
@@ -60,6 +55,4 @@ okterm socat.tmp
 
 You should get a terminal connected to the pty socat allocated; hit enter and you should see a shell prompt.
 
-None of this is `okterm`-specific — as far as [ok-serial](https://github.com/egnor/ok-py-serial#readme) is concerned `./socat.tmp` is just another serial port, so `ok_serial.SerialConnection(match="socat.tmp", baud=115200)` works the same way from your own code.
-
-Working in a checkout of this repo, `mise run socat-run` and `mise run socat-ab` wrap the two arrangements above (a program on a pty, and a pair of connected ptys).
+(None of this is `okterm`-specific — as far as [ok-serial](https://github.com/egnor/ok-py-serial#readme) is concerned `./socat.tmp` is just another serial port, so `ok_serial.SerialConnection(match="socat.tmp", baud=115200)` works the same way from your own code.)
