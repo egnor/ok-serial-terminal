@@ -1,0 +1,57 @@
+[project]
+authors = [{ name = "Dan Egnor", email = "egnor@ofb.net" }]
+dependencies = [
+  "click>=8.3.1",
+  "ok-logging-setup>=0.17",
+  "ok-serial>=0.4",
+]
+description = "Interactive serial port terminal (based on ok-serial)"
+name = "ok-serial-terminal"
+readme = "README.md"
+requires-python = ">=3.11"
+urls.Homepage = "https://github.com/egnor/ok-serial-terminal#readme"
+urls.Repository = "https://github.com/egnor/ok-serial-terminal.git"
+version = "0.1"
+
+[project.scripts]
+okterm = "ok_terminal.main:main"
+
+[build-system]
+requires = ["uv_build>=0.9.13", "uv_build<0.12"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+  "mypy~=2.3",
+  "pytest~=9.1",
+  "pytest-asyncio~=1.4",
+  "pytest-mock~=3.15",
+  "ruff~=0.15",
+]
+
+[tool.mypy]
+check_untyped_defs = true
+exclude_gitignore = true
+files = "."
+warn_unreachable = true
+
+[tool.pytest]
+asyncio_mode = "auto"
+log_level = "CRITICAL"
+strict = true
+
+[tool.ruff]
+line-length = 80
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.uv.build-backend]
+module-name = "ok_terminal"  # the package name would imply "ok_serial_terminal"
+module-root = ""
+
+# TODO: drop this once ok-serial 0.4 is published to PyPI (0.3.1 is the newest
+# there, and predates the match-syntax change this depends on). Local dev only;
+# uv sources aren't recorded in published package metadata.
+[tool.uv.sources]
+ok-serial = { path = "../ok-py-serial", editable = true }
