@@ -27,7 +27,7 @@ uvx ok-serial-terminal <port> [baud]
 # or `pipx run ok-serial-terminal <port> [baud]`
 ```
 
-The baud rate defaults to 115200 if omitted. The port is an [ok-serial match expression](https://github.com/egnor/ok-py-serial#port-matching), so `okterm RP2040`, `okterm 2e8a:0005`, and `okterm /dev/ttyACM0` all work. Run [`okserial`](https://github.com/egnor/ok-py-serial#readme) (or `uvx ok-py-serial`) to list visible ports and their attributes.
+The baud rate defaults to 115200 if omitted. The port is an [ok-serial match expression](https://github.com/egnor/ok-py-serial#port-matching), so `okterm RP2040`, `okterm 2e8a:0005`, and `okterm /dev/ttyACM0` all work. Run [`okserial`](https://github.com/egnor/ok-py-serial#readme) (or `uvx ok-serial`, etc.) to list visible ports and their attributes.
 
 On a terminal (unless `--plain` is given), `okterm` decorates the display with connection status, control signal state, and an indicator for unechoed typed characters. In this mode, ctrl-`]` opens a menu and ctrl-`\` quits.
 
