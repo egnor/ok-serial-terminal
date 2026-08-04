@@ -1,6 +1,6 @@
-# OK serial terminal &nbsp; ⌨️〡🔌〡〇〡〇
+# OK serial terminal &nbsp; 🔌〡〇〡〇〡💻
 
-An interactive [serial port](https://en.wikipedia.org/wiki/Serial_port) terminal for Python users, built on [ok-serial](https://github.com/egnor/ok-py-serial#readme).
+An interactive [serial port](https://en.wikipedia.org/wiki/Serial_port) terminal, built on [ok-serial](https://github.com/egnor/ok-py-serial#readme).
 
 Think twice before using this! Consider something more established:
 
@@ -10,28 +10,28 @@ Think twice before using this! Consider something more established:
 - [minicom](https://salsa.debian.org/minicom-team/minicom) - if you're nostalgic for the DOS era
 - [pyserial's miniterm](https://pyserial.readthedocs.io/en/latest/tools.html#module-serial.tools.miniterm) - `python -m serial.tools.miniterm`, already installed if you have pyserial
 
-## Installation
+## Installation and Usage
 
-```bash
+Install the Python package, which installs the `okterm` utility:
+
+```sh
 pip install ok-serial-terminal
-```
-
-(or `uv add ok-serial-terminal`, `uv tool install ok-serial-terminal`, etc.)
-
-To try it without installing anything, `uvx ok-serial-terminal <port> [baud]` (or `pipx run ok-serial-terminal ...`). The command is installed under both `okterm` and the longer `ok-serial-terminal`; they're the same program.
-
-## Usage
-
-```bash
+# or 'uv add ok-serial-terminal', 'uv tool install ok-serial-terminal', etc.
 okterm <port> [baud]
 ```
 
-For example, `okterm MyDevice 115200`. The baud rate defaults to 115200 if
-omitted. The port is an [ok-serial match expression](https://github.com/egnor/ok-py-serial#port-matching), so `okterm RP2040`, `okterm 2e8a:0005`, and `okterm /dev/ttyACM0` all work. Run [`okserial`](https://github.com/egnor/ok-py-serial#readme) (from the `ok-serial` package) to see which ports are visible and what attributes they have.
+OR, skip the package install and run it directly with [uvx](https://docs.astral.sh/uv/guides/tools/) or [pipx](https://pipx.pypa.io/stable/):
 
-Once connected, ctrl-`]` opens a menu and ctrl-`\` quits.
+```sh
+uvx ok-serial-terminal <port> [baud]
+# or `pipx run ok-serial-terminal <port> [baud]`
+```
 
-On a terminal, unless `--plain` is given, `okterm` decorates the display with connection status, control signal state, and an indicator for unechoed typed characters.
+The baud rate defaults to 115200 if omitted. The port is an [ok-serial match expression](https://github.com/egnor/ok-py-serial#port-matching), so `okterm RP2040`, `okterm 2e8a:0005`, and `okterm /dev/ttyACM0` all work. Run [`okserial`](https://github.com/egnor/ok-py-serial#readme) (or `uvx ok-py-serial`) to list visible ports and their attributes.
+
+On a terminal (unless `--plain` is given), `okterm` decorates the display with connection status, control signal state, and an indicator for unechoed typed characters. In this mode, ctrl-`]` opens a menu and ctrl-`\` quits.
+
+In plain mode (I/O redirected or `--plain` given), data is pass-through and ^C quits.
 
 See `okterm --help` for more options (locking mode, etc).
 
