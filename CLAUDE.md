@@ -26,9 +26,10 @@ uv run pytest tests/test_keyboard.py::test_kitty_key_reports
 ## Architecture
 
 **ok-serial-terminal** provides `okterm`, an interactive serial terminal built on
-the [ok-serial](https://github.com/egnor/ok-py-serial) library. The `ok_terminal`
-package is a CLI utility, not a library; nothing here is meant to be imported by
-other projects.
+the [ok-serial](https://github.com/egnor/ok-py-serial) library. The
+`ok_serial_terminal` package is a CLI utility, not a library; nothing here is
+meant to be imported by other projects. (`ok-serial-terminal` is installed as a
+second name for the same command, so `uvx ok-serial-terminal` works.)
 
 ### Core Components
 

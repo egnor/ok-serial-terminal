@@ -11,6 +11,9 @@ version = "0.1"
 
 [project.scripts]
 okterm = "ok_serial_terminal.main:main"
+# alias so `uvx ok-serial-terminal` / `pipx run ok-serial-terminal` work; both
+# look for an executable named after the package
+ok-serial-terminal = "ok_serial_terminal.main:main"
 
 [build-system]
 requires = ["uv_build>=0.9.13", "uv_build<0.12"]

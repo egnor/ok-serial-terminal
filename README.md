@@ -18,6 +18,8 @@ pip install ok-serial-terminal
 
 (or `uv add ok-serial-terminal`, `uv tool install ok-serial-terminal`, etc.)
 
+To try it without installing anything, `uvx ok-serial-terminal <port> [baud]` (or `pipx run ok-serial-terminal ...`). The command is installed under both `okterm` and the longer `ok-serial-terminal`; they're the same program.
+
 ## Usage
 
 ```bash

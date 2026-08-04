@@ -6,5 +6,4 @@ This package is a CLI utility (`okterm`), not a library.
 
 import importlib.metadata
 
-# the distribution name ("ok-serial-terminal") differs from the module name
-__version__ = importlib.metadata.version("ok-serial-terminal")
+__version__ = importlib.metadata.version(__package__)
