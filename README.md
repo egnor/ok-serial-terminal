@@ -6,7 +6,8 @@ Think twice before using this! Consider something more established:
 
 - [tio](https://github.com/tio/tio) - not Python, but a great serial terminal utility
 - [picocom](https://github.com/npat-efault/picocom) - the classic minimal serial terminal
-- [screen](https://www.gnu.org/software/screen/) / [minicom](https://salsa.debian.org/minicom-team/minicom) - the even more classic options
+- [screen](https://www.gnu.org/software/screen/) - the terminal multiplexer is also a serial terminal
+- [minicom](https://salsa.debian.org/minicom-team/minicom) - if you're nostalgic for the DOS era
 - [pyserial's miniterm](https://pyserial.readthedocs.io/en/latest/tools.html#module-serial.tools.miniterm) - `python -m serial.tools.miniterm`, already installed if you have pyserial
 
 ## Installation

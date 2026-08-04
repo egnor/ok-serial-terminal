@@ -1,6 +1,6 @@
 from typing import Literal
 
-from ok_terminal.mode_tracker import TerminalModeTracker
+from ok_serial_terminal.mode_tracker import TerminalModeTracker
 
 RESET = TerminalModeTracker()
 

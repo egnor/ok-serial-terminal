@@ -6,7 +6,7 @@ import pytest
 import threading
 import tty
 
-from ok_terminal.async_stdio import AsyncReader, AsyncWriter
+from ok_serial_terminal.async_stdio import AsyncReader, AsyncWriter
 
 
 @pytest.fixture

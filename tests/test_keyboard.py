@@ -1,4 +1,4 @@
-from ok_terminal.keyboard import (
+from ok_serial_terminal.keyboard import (
     TerminalKeyEvent,
     chunk_to_key_event as key,
     _KEY_CODES,

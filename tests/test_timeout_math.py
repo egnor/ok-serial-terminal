@@ -1,4 +1,4 @@
-from ok_terminal import timeout_math
+from ok_serial_terminal import timeout_math
 
 
 def test_timeout_to_deadline(mocker):

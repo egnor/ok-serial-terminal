@@ -1,4 +1,4 @@
-from ok_terminal.decorator import TerminalDecorator
+from ok_serial_terminal.decorator import TerminalDecorator
 
 # the decoration mode differs from the default base mode only by DECAWM,
 # so mode switches show up in the output as these two escapes

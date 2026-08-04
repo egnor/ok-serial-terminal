@@ -1,4 +1,4 @@
-from ok_terminal.chunker import TerminalChunker
+from ok_serial_terminal.chunker import TerminalChunker
 
 
 def chunk_all(data: bytes) -> list[str | bytes]:

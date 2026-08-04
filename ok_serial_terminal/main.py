@@ -16,16 +16,16 @@ import sys
 import time
 from typing import assert_never
 
-import ok_terminal
-from ok_terminal.async_stdio import (
+from ok_serial_terminal import __version__
+from ok_serial_terminal.async_stdio import (
     AsyncReader,
     AsyncWriter,
     raw_tty_context,
 )
-from ok_terminal.chunker import TerminalChunker, chunk_to_bytes
-from ok_terminal.decorator import TerminalDecorator
-from ok_terminal.keyboard import TerminalKeyEvent, chunk_to_key_event
-from ok_terminal.timeout_math import from_deadline, to_deadline
+from ok_serial_terminal.chunker import TerminalChunker, chunk_to_bytes
+from ok_serial_terminal.decorator import TerminalDecorator
+from ok_serial_terminal.keyboard import TerminalKeyEvent, chunk_to_key_event
+from ok_serial_terminal.timeout_math import from_deadline, to_deadline
 
 # TODO: maybe skip TerminalChunker entirely in plain (non-decorator) mode?
 
@@ -107,7 +107,7 @@ class _TerminalSession:
             if not opts.plain and os.isatty(1) and os.stat(0) == os.stat(1):
                 intro_chunks: list[bytes | str] = [
                     b"\x1b[37;44m",
-                    f"▸ okterm v{ok_terminal.__version__} ┊ ",
+                    f"▸ okterm v{__version__} ┊ ",
                     *(b"\x1b[1m", "ctrl-]", b"\x1b[22m", " for menu ┊ "),
                     *(b"\x1b[1m", "ctrl-\\", b"\x1b[22m", " to quit "),
                     b"\x1b[K",

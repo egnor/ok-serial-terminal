@@ -234,7 +234,7 @@ wheels = [
 [[package]]
 name = "ok-serial"
 version = "0.4"
-source = { editable = "../ok-py-serial" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
     { name = "natsort" },
@@ -242,25 +242,9 @@ dependencies = [
     { name = "pyserial" },
     { name = "types-pyserial" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "click", specifier = ">=8.3.1" },
-    { name = "natsort", specifier = ">=8.4.0" },
-    { name = "ok-logging-setup", specifier = ">=0.17" },
-    { name = "pyserial", specifier = ">=3.5" },
-    { name = "types-pyserial", specifier = ">=3.5.0.20251001" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "mypy", specifier = "~=2.3" },
-    { name = "pdoc", specifier = "~=16.0" },
-    { name = "pyfakefs", specifier = "~=6.2" },
-    { name = "pytest", specifier = "~=9.1" },
-    { name = "pytest-asyncio", specifier = "~=1.4" },
-    { name = "pytest-mock", specifier = "~=3.15" },
-    { name = "ruff", specifier = "~=0.15" },
+sdist = { url = "https://files.pythonhosted.org/packages/12/1c/de5b728694e848a168e5e5d806ec92ce099d05766f2902b496563afef462/ok_serial-0.4.tar.gz", hash = "sha256:cfd9f74f4bf8c05bb73a018385a2db0a9ae19f6a8c0e2345c15ab6c22d353ee1", size = 18893, upload-time = "2026-08-04T20:08:02.836Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/73/3f/154221349828ad4d599ec50cd57e26a2588319350c29b91556a792d0afc4/ok_serial-0.4-py3-none-any.whl", hash = "sha256:05d866641c3062ce3d9afb6e5fdd576d7d60fe2386492fe23020a34ccbc58b4c", size = 22793, upload-time = "2026-08-04T20:08:03.77Z" },
 ]
 
 [[package]]
@@ -286,7 +270,7 @@ dev = [
 requires-dist = [
     { name = "click", specifier = ">=8.3.1" },
     { name = "ok-logging-setup", specifier = ">=0.17" },
-    { name = "ok-serial", editable = "../ok-py-serial" },
+    { name = "ok-serial", specifier = ">=0.4" },
 ]
 
 [package.metadata.requires-dev]

@@ -1,7 +1,7 @@
 import re
 from typing import Literal
 
-from ok_terminal.mode_tracker import TerminalModeTracker
+from ok_serial_terminal.mode_tracker import TerminalModeTracker
 
 QUERY_PASSTHRU_TIMEOUT = 1.0  # seconds
 CURSOR_QUERY_RX = re.compile(b"(?:\x1b\\[|\x9b)6n")
