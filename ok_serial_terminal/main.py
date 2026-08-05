@@ -29,9 +29,17 @@ from ok_serial_terminal.timeout_math import from_deadline, to_deadline
 
 # TODO: maybe skip TerminalChunker entirely in plain (non-decorator) mode?
 
-ok_logging_setup.skip_traceback_for(OSError)  # includes SerialException
-ok_logging_setup.skip_traceback_for(EOFError)
-ok_logging_setup.install()
+
+@dataclasses.dataclass(frozen=True)
+class TerminalOptions:
+    match: str
+    copts: ok_serial.SerialConnectionOptions
+    mopts: ok_serial.SerialMonitorOptions
+    plain: bool
+    reconnect: bool
+
+
+_NONPRINT_RX = re.compile("[\x00-\x1f]")  # unprintable characters to escape
 
 
 @click.command()
@@ -52,6 +60,10 @@ def main(
 ):
     """Start an interactive terminal on a serial port"""
 
+    ok_logging_setup.skip_traceback_for(OSError)  # includes SerialException
+    ok_logging_setup.skip_traceback_for(EOFError)
+    ok_logging_setup.install()
+
     baud = 115200
     if port_baud[-1].isdigit():
         port_baud, baud = port_baud[:-1], int(port_baud[-1])
@@ -59,24 +71,11 @@ def main(
     opts = TerminalOptions(
         match=" ".join(port_baud),
         copts=ok_serial.SerialConnectionOptions(baud=baud, sharing=sharing),
-        mopts=ok_serial.SerialMonitorOptions(
-            scan_timeout=scan_time,
-            reconnect_limit=None if reconnect else 0,
-        ),
+        mopts=ok_serial.SerialMonitorOptions(scan_timeout=scan_time),
         plain=plain,
+        reconnect=reconnect,
     )
     asyncio.run(_TerminalSession().run(opts))
-
-
-@dataclasses.dataclass(frozen=True)
-class TerminalOptions:
-    match: str
-    copts: ok_serial.SerialConnectionOptions
-    mopts: ok_serial.SerialMonitorOptions
-    plain: bool = False
-
-
-_NONPRINT_RX = re.compile("[\x00-\x1f]")  # unprintable characters to escape
 
 
 class _TerminalSession:
@@ -403,6 +402,8 @@ class _TerminalSession:
                     try:
                         await self._read_from_serial()
                     except ok_serial.SerialIoException as ex:
+                        if not opts.reconnect:
+                            raise
                         self._serial_error = ex
                     finally:
                         self._serial = None
