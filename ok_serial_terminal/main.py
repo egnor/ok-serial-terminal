@@ -46,16 +46,16 @@ _NONPRINT_RX = re.compile("[\x00-\x1f]")  # unprintable characters to escape
 @click.argument("port_baud", metavar="PORT/BAUD", nargs=-1, required=True)
 @click.option("--plain", "-p", is_flag=True)
 @click.option("--reconnect", "-r", is_flag=True)
-@click.option("--scan-time", "-s", default=0.0)
+@click.option("--scan-time", "-s", default=None, type=float)
 @click.option("--oblivious", "sharing", flag_value="oblivious")
 @click.option("--polite", "sharing", flag_value="polite")
 @click.option("--exclusive", "sharing", flag_value="exclusive", default=True)
 @click.option("--stomp", "sharing", flag_value="stomp")
 def main(
     port_baud: tuple[str, ...],
-    plain: bool = False,
-    reconnect: bool = False,
-    scan_time: float = 0.0,
+    plain: bool,
+    reconnect: bool,
+    scan_time: float | None,
     sharing: ok_serial.SerialSharingType = "exclusive",
 ):
     """Start an interactive terminal on a serial port"""
@@ -67,6 +67,10 @@ def main(
     baud = 115200
     if port_baud[-1].isdigit():
         port_baud, baud = port_baud[:-1], int(port_baud[-1])
+
+    # scan-time default is 0.0 (immediate) *or* None (forever) with --reconnect
+    if scan_time is None and not reconnect:
+        scan_time = 0.0
 
     opts = TerminalOptions(
         match=" ".join(port_baud),
