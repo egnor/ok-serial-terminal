@@ -292,8 +292,11 @@ class _TerminalSession:
         #
 
         serial_chunks, self._serial_chunks = self._serial_chunks, []
-        if serial_chunks:
-            decor.add_base.extend(serial_chunks)
+        for chunk in serial_chunks:
+            # Turn \n into \r\n to deal with naked newlines
+            if chunk == b"\n":
+                decor.add_base.append(b"\r")
+            decor.add_base.append(chunk)
 
         #
         # unechoed character display
