@@ -87,6 +87,7 @@ class _TerminalSession:
         async with contextlib.AsyncExitStack() as cleanup:
             self._event_loop = asyncio.get_running_loop()
             self._new_data_event = asyncio.Event()
+            self._opts = opts
 
             self._serial: ok_serial.SerialConnection | None = None
             self._serial_signals: ok_serial.SerialControlSignals | None = None
@@ -195,8 +196,8 @@ class _TerminalSession:
                 line = [
                     *(b"\x1b[1;30;42m", "▶ Connected", b"\x1b[22m"),
                     f" ┊ {self._serial.port_name}",
-                    f" ┊ {self._serial.opts.baud}bps",
-                    f" ┊ {self._serial.opts.sharing}",
+                    f" ┊ {self._opts.copts.baud}bps",
+                    f" ┊ {self._opts.copts.sharing}",
                 ]
                 decor.add_above.append([*line, b"\x1b[K"])
             self._last_serial = self._serial
