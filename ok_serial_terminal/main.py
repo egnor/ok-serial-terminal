@@ -182,16 +182,17 @@ class _TerminalSession:
         # Serial connection/disconnection and status
         #
 
-        line: list[bytes | str]
         if self._serial is not self._last_serial:
             if self._last_serial:
-                decor.reset()
-                line = [b"\x1b[1;30;43m", "▶ Disconnected", b"\x1b[22m"]
-                if self._serial_error:
-                    line.append(f" ┊ {self._serial_error}")
-                else:
-                    line.append(f" ┊ {self._last_serial.port_name}")
+                err = self._serial_error
+                line = [
+                    *(b"\x1b[1;30;43m", "▶ Disconnected", b"\x1b[22m"),
+                    *f" ┊ {str(err) if err else self._last_serial.port_name}",
+                ]
                 decor.add_above.append([*line, b"\x1b[K"])
+                while err := err and err.__cause__:
+                    line = [b"\x1b[33;40m", f" ⬅  {err}"]
+                    decor.add_above.append([*line, b"\x1b[K"])
             if self._serial:
                 line = [
                     *(b"\x1b[1;30;42m", "▶ Connected", b"\x1b[22m"),
@@ -231,13 +232,13 @@ class _TerminalSession:
         # fatal errors
         #
 
-        if self._serial_failed:
-            decor.reset()  # back to main screen, add blank line
-            line = [
-                *(b"\x1b[1;37;41m", "▶ Failed", b"\x1b[22m", " ┊ "),
-                str(self._serial_failed),
-            ]
+        if err := self._serial_failed:
+            line = [b"\x1b[1;37;41m", "▶ Failed", b"\x1b[22m", f" ┊ {err}"]
+            decor.reset()
             decor.add_above.append([*line, b"\x1b[K"])
+            while err := err.__cause__:
+                line = [b"\x1b[33;40m", f" ⬅  {err}"]
+                decor.add_above.append([*line, b"\x1b[K"])
             decor.update(timestamp)
             raise SystemExit(1)
 
@@ -245,9 +246,9 @@ class _TerminalSession:
             decor.reset()  # back to main screen, add blank line
             line = [
                 *(b"\x1b[1;37;41m", "▶ Killed", b"\x1b[22m", " ┊ "),
-                *(self._decorator_killed.name, b"\x1b[K"),
+                self._decorator_killed.name,
             ]
-            decor.add_above.append(line)
+            decor.add_above.append([*line, b"\x1b[K"])
             decor.update(timestamp)
             raise SystemExit(255)
 
@@ -265,9 +266,9 @@ class _TerminalSession:
                 decor.reset()  # back to main screen, add blank line
                 line = [
                     *(b"\x1b[1;37;44m", "▶ Quit", b"\x1b[22m"),
-                    *(" ┊ (ctrl-\\ pressed)", b"\x1b[K"),
+                    " ┊ (ctrl-\\ pressed)",
                 ]
-                decor.add_above.append(line)
+                decor.add_above.append([*line, b"\x1b[K"])
                 decor.update(timestamp)
                 raise SystemExit(0)
 

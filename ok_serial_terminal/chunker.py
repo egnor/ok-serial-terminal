@@ -113,9 +113,9 @@ class TerminalChunker:
 
 def chunk_to_bytes(chunk: str | bytes):
     """Returns the data-stream bytes for a TerminalChunker-type chunk."""
-    assert isinstance(chunk, (str, bytes)), chunk
+    assert isinstance(chunk, (str, bytes)), repr(chunk)
     if isinstance(chunk, bytes):
         return chunk
     else:
-        assert _VALID_TEXT_RX.fullmatch(chunk), chunk
+        assert _VALID_TEXT_RX.fullmatch(chunk), repr(chunk)
         return chunk.encode()

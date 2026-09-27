@@ -7,7 +7,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 urls.Homepage = "https://github.com/egnor/ok-serial-terminal#readme"
 urls.Repository = "https://github.com/egnor/ok-serial-terminal.git"
-version = "0.4"
+version = "0.5"
 
 [project.scripts]
 okterm = "ok_serial_terminal.main:main"
