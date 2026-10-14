@@ -71,6 +71,56 @@ def test_above_decoration_inserts_lines():
     assert deco.add_above == []
 
 
+def test_above_decoration_precedes_base_in_same_update():
+    # a message queued alongside base data lands above that data
+    deco = TerminalDecorator()
+    deco.add_base += ["line1", b"\r\n", "line2", b"\r\n"]
+    deco.add_above += [["note"]]
+    assert to_term(deco) == [
+        WRAP_OFF,
+        b"\n",
+        b"\x1b[1A",
+        b"\x1b[1L",
+        b"\r",
+        "note",
+        b"\n",  # ends at the base row
+        b"\x1b[1G",  # back to the base column
+        WRAP_ON,
+        "line1",
+        b"\r\n",
+        "line2",
+        b"\r\n",
+    ]
+    assert deco.add_above == []
+    assert deco.add_base == []
+
+
+def test_above_decoration_defers_base_until_cursor_known():
+    # with the base column unknown, inserting above needs a cursor query,
+    # and base content queued in the same update waits for the reply
+    deco = TerminalDecorator()
+    deco.add_base += ["abc"]
+    assert to_term(deco) == ["abc"]
+
+    deco.add_above += [["note"]]
+    deco.add_base += ["more"]
+    assert to_term(deco) == [
+        WRAP_OFF,
+        b"\x1b[6n",  # query the cursor position
+        b"\n",
+        b"\x1b[1A",
+        b"\x1b[1L",
+        b"\r",
+        "note",
+        b"\n",
+    ]
+    assert deco.add_base == ["more"]  # still pending
+
+    deco.add_from_terminal += [b"\x1b[2;4R"]
+    assert to_term(deco) == [b"\x1b[4G", WRAP_ON, "more"]
+    assert deco.add_base == []
+
+
 def test_below_decoration_inserts_and_truncates():
     deco = TerminalDecorator()
     deco.set_below = [["aaa"], ["bbb"]]

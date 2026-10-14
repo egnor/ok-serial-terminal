@@ -15,9 +15,9 @@ class TerminalDecorator:
     on their way to/from the terminal, via these properties:
 
     Input *queues* (caller should append, culled by .update() as processed):
-    - .add_base (chunk list) - base terminal data from serial port
     - .add_above (chunk lists) - message lines to insert above the cursor and
         leave in place (eg. important status messages/logs)
+    - .add_base (chunk list) - base terminal data from serial port
     - .add_from_terminal (chunk list) - input chunks received from the terminal
 
     Input *values* (caller should set/update, .update() observes changes):
@@ -127,6 +127,21 @@ class TerminalDecorator:
             )
             del self._now_below[-del_below:]
 
+        # insert lines above if requested
+        if self.add_above:
+            self._switch_terminal_mode(self._new_decoration_mode())
+            self._prepare_cursor_to_roam(time)  # adding content moves cursor
+            self._emit(
+                *[b"\n"] * len(self.add_above),  # scroll down to make room
+                b"\x1b[%dA" % len(self.add_above),  # move back up
+                b"\x1b[%dL" % len(self.add_above),  # insert rows
+            )
+            self._emit(b"\r", *self.add_above[0], b"\n")
+            for next_line in self.add_above[1:]:
+                self._switch_terminal_mode(self._new_decoration_mode())
+                self._emit(b"\r", *next_line, b"\n")  # ends at base row
+            self.add_above.clear()
+
         # add base content if provided, reachable, and clear of decorations
         if self.add_base and (
             self._can_move_cursor_to_base()
@@ -151,21 +166,6 @@ class TerminalDecorator:
             self._prepare_cursor_to_roam(time)  # adding content moves cursor
             self._emit(*self.set_right)
             self._now_right[:] = self.set_right
-
-        # insert lines above if requested
-        if self.add_above:
-            self._switch_terminal_mode(self._new_decoration_mode())
-            self._prepare_cursor_to_roam(time)  # adding content moves cursor
-            self._emit(
-                *[b"\n"] * len(self.add_above),  # scroll down to make room
-                b"\x1b[%dA" % len(self.add_above),  # move back up
-                b"\x1b[%dL" % len(self.add_above),  # insert rows
-            )
-            self._emit(b"\r", *self.add_above[0], b"\n")
-            for next_line in self.add_above[1:]:
-                self._switch_terminal_mode(self._new_decoration_mode())
-                self._emit(b"\r", *next_line, b"\n")  # ends at base row
-            self.add_above.clear()
 
         # insert lines below if requested
         assert len(self.set_below) >= len(self._now_below)
