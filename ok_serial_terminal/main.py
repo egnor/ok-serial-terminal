@@ -2,19 +2,20 @@
 
 """CLI tool for an interactive terminal on a serial port"""
 
-import click
-import ok_logging_setup
-import ok_serial
-
 import asyncio
 import contextlib
 import dataclasses
+import importlib.metadata
 import os
 import re
 import signal
 import sys
 import time
 from typing import assert_never
+
+import click
+import ok_logging_setup
+import ok_serial
 
 from ok_serial_terminal import __version__
 from ok_serial_terminal.async_stdio import (
@@ -51,12 +52,14 @@ _NONPRINT_RX = re.compile("[\x00-\x1f]")  # unprintable characters to escape
 @click.option("--polite", "sharing", flag_value="polite")
 @click.option("--exclusive", "sharing", flag_value="exclusive", default=True)
 @click.option("--stomp", "sharing", flag_value="stomp")
+@click.version_option()
 def main(
     port_baud: tuple[str, ...],
     plain: bool,
     reconnect: bool,
     scan_time: float | None,
     sharing: ok_serial.SerialSharingType = "exclusive",
+    version: bool = False,
 ):
     """Start an interactive terminal on a serial port"""
 
