@@ -5,7 +5,6 @@
 import asyncio
 import contextlib
 import dataclasses
-import importlib.metadata
 import os
 import re
 import signal
@@ -187,7 +186,7 @@ class _TerminalSession:
 
         if self._serial is not self._last_serial:
             if self._last_serial:
-                err = self._serial_error
+                err: BaseException | None = self._serial_error
                 line = [
                     *(b"\x1b[1;30;43m", "▶ Disconnected", b"\x1b[22m"),
                     *f" ┊ {str(err) if err else self._last_serial.port_name}",
@@ -240,7 +239,8 @@ class _TerminalSession:
             decor.reset()
             decor.add_above.append([*line, b"\x1b[K"])
             while err := err.__cause__:
-                line = [b"\x1b[33;40m", f" ⬅  {err}"]
+                text = " · ".join(t.strip() for t in str(err).split("\n"))
+                line = [b"\x1b[33;40m", f" ⬅  {text}"]
                 decor.add_above.append([*line, b"\x1b[K"])
             decor.update(timestamp)
             raise SystemExit(1)
